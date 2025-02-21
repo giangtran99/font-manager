@@ -159,7 +159,7 @@ FontDescriptor *resultFromFont(IDWriteFont *font) {
   return res;
 }
 
-ResultSet *getAvailableFonts() {
+ResultSet *getAvailableFontsImpl() {
   ResultSet *res = new ResultSet();
   int count = 0;
 
@@ -233,8 +233,8 @@ bool resultMatches(FontDescriptor *result, FontDescriptor *desc) {
   return true;
 }
 
-ResultSet *findFonts(FontDescriptor *desc) {
-  ResultSet *fonts = getAvailableFonts();
+ResultSet *findFontsImpl(FontDescriptor *desc) {
+  ResultSet *fonts = getAvailableFontsImpl();
 
   for (ResultSet::iterator it = fonts->begin(); it != fonts->end();) {
     if (!resultMatches(*it, desc)) {
@@ -248,8 +248,8 @@ ResultSet *findFonts(FontDescriptor *desc) {
   return fonts;
 }
 
-FontDescriptor *findFont(FontDescriptor *desc) {
-  ResultSet *fonts = findFonts(desc);
+FontDescriptor *findFontImpl(FontDescriptor *desc) {
+  ResultSet *fonts = findFontsImpl(desc);
 
   // if we didn't find anything, try again with only the font traits, no string names
   if (fonts->size() == 0) {
@@ -260,14 +260,14 @@ FontDescriptor *findFont(FontDescriptor *desc) {
       desc->weight, desc->width, desc->italic, false
     );
 
-    fonts = findFonts(fallback);
+    fonts = findFontsImpl(fallback);
   }
 
   // ok, nothing. shouldn't happen often. 
   // just return the first available font
   if (fonts->size() == 0) {
     delete fonts;
-    fonts = getAvailableFonts();
+    fonts = getAvailableFontsImpl();
   }
 
   // hopefully we found something now.
@@ -399,7 +399,7 @@ public:
   }
 };
 
-FontDescriptor *substituteFont(char *postscriptName, char *string) {
+FontDescriptor *substituteFontImpl(char *postscriptName, char *string) {
   FontDescriptor *res = NULL;
 
   IDWriteFactory *factory = NULL;
@@ -416,7 +416,7 @@ FontDescriptor *substituteFont(char *postscriptName, char *string) {
   // find the font for the given postscript name
   FontDescriptor *desc = new FontDescriptor();
   desc->postscriptName = postscriptName;
-  FontDescriptor *font = findFont(desc);
+  FontDescriptor *font = findFontImpl(desc);
 
   // create a text format object for this font
   IDWriteTextFormat *format = NULL;

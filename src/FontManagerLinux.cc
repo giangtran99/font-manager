@@ -139,7 +139,7 @@ ResultSet *getResultSet(FcFontSet *fs) {
   return res;
 }
 
-ResultSet *getAvailableFonts() {
+ResultSet *getAvailableFontsImpl() {
   FcInit();
 
   FcPattern *pattern = FcPatternCreate();
@@ -183,7 +183,7 @@ FcPattern *createPattern(FontDescriptor *desc) {
   return pattern;
 }
 
-ResultSet *findFonts(FontDescriptor *desc) {
+ResultSet *findFontsImpl((FontDescriptor *desc) {
   FcPattern *pattern = createPattern(desc);
   FcObjectSet *os = FcObjectSetBuild(FC_FILE, FC_POSTSCRIPT_NAME, FC_FAMILY, FC_STYLE, FC_WEIGHT, FC_WIDTH, FC_SLANT, FC_SPACING, NULL);
   FcFontSet *fs = FcFontList(NULL, pattern, os);
@@ -196,7 +196,7 @@ ResultSet *findFonts(FontDescriptor *desc) {
   return res;
 }
 
-FontDescriptor *findFont(FontDescriptor *desc) {
+FontDescriptor *findFontImpl(FontDescriptor *desc) {
   FcPattern *pattern = createPattern(desc);
   FcConfigSubstitute(NULL, pattern, FcMatchPattern);
   FcDefaultSubstitute(pattern);
@@ -211,7 +211,7 @@ FontDescriptor *findFont(FontDescriptor *desc) {
   return res;
 }
 
-FontDescriptor *substituteFont(char *postscriptName, char *string) {
+FontDescriptor *substituteFontImpl((char *postscriptName, char *string) {
   FcInit();
 
   // create a pattern with the postscript name

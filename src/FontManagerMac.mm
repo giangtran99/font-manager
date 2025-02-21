@@ -68,7 +68,7 @@ FontDescriptor *createFontDescriptor(CTFontDescriptorRef descriptor) {
   return res;
 }
 
-ResultSet *getAvailableFonts() {
+ResultSet *getAvailableFontsImpl() {
   // cache font collection for fast use in future calls
   static CTFontCollectionRef collection = NULL;
   if (collection == NULL)
@@ -155,7 +155,7 @@ int metricForMatch(CTFontDescriptorRef match, FontDescriptor *desc) {
   return metric;
 }
 
-ResultSet *findFonts(FontDescriptor *desc) {
+ResultSet *findFontsImpl(FontDescriptor *desc) {
   CTFontDescriptorRef descriptor = getFontDescriptor(desc);
   NSArray *matches = (NSArray *) CTFontDescriptorCreateMatchingFontDescriptors(descriptor, NULL);
   ResultSet *results = new ResultSet();
@@ -201,7 +201,7 @@ CTFontDescriptorRef findBest(FontDescriptor *desc, NSArray *matches) {
   return best;
 }
 
-FontDescriptor *findFont(FontDescriptor *desc) {  
+FontDescriptor *findFontImpl(FontDescriptor *desc) {  
   FontDescriptor *res = NULL;
   CTFontDescriptorRef descriptor = getFontDescriptor(desc);
   NSArray *matches = (NSArray *) CTFontDescriptorCreateMatchingFontDescriptors(descriptor, NULL);
@@ -226,7 +226,7 @@ FontDescriptor *findFont(FontDescriptor *desc) {
   return res;
 }
 
-FontDescriptor *substituteFont(char *postscriptName, char *string) {
+FontDescriptor *substituteFontImpl(char *postscriptName, char *string) {
   FontDescriptor *res = NULL;
   
   // create a font descriptor to find the font by its postscript name
