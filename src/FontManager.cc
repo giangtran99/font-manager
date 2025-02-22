@@ -39,7 +39,7 @@ napi_value wrapResult(napi_env env, FontDescriptor* result) {
 
 // Async request structure for passing data
 struct AsyncRequest {
-    uv_work_t work;
+  uv_work_t work;
   FontDescriptor *desc;     // used by findFont and findFonts
   char *postscriptName;     // used by substituteFont
   char *substitutionString; // ditto
